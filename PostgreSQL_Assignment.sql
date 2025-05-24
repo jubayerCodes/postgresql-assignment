@@ -22,28 +22,118 @@ CREATE TABLE sightings (
     notes VARCHAR(50) DEFAULT NULL
 );
 
-INSERT INTO rangers (name, region)
-VALUES
-    ('Alice Green', 'Northern Hills'),
+-- SAMPLE DATA INSERTION
+
+INSERT INTO
+    rangers (name, region)
+VALUES (
+        'Alice Green',
+        'Northern Hills'
+    ),
     ('Bob White', 'River Delta'),
-    ('Carol King', 'Mountain Range');
+    (
+        'Carol King',
+        'Mountain Range'
+    );
 
+INSERT INTO
+    species (
+        common_name,
+        scientific_name,
+        discovery_date,
+        conservation_status
+    )
+VALUES (
+        'Snow Leopard',
+        'Panthera uncia',
+        '1775-01-01',
+        'Endangered'
+    ),
+    (
+        'Bengal Tiger',
+        'Panthera tigris tigris',
+        '1758-01-01',
+        'Endangered'
+    ),
+    (
+        'Red Panda',
+        'Ailurus fulgens',
+        '1825-01-01',
+        'Vulnerable'
+    ),
+    (
+        'Asiatic Elephant',
+        'Elephas maximus indicus',
+        '1758-01-01',
+        'Endangered'
+    );
 
-INSERT INTO species (common_name, scientific_name, discovery_date, conservation_status)
-VALUES
-    ('Snow Leopard', 'Panthera uncia', '1775-01-01', 'Endangered'),
-    ('Bengal Tiger', 'Panthera tigris tigris', '1758-01-01', 'Endangered'),
-    ('Red Panda', 'Ailurus fulgens', '1825-01-01', 'Vulnerable'),
-    ('Asiatic Elephant', 'Elephas maximus indicus', '1758-01-01', 'Endangered');
+INSERT INTO
+    sightings (
+        ranger_id,
+        species_id,
+        sighting_time,
+        location,
+        notes
+    )
+VALUES (
+        1,
+        1,
+        '2024-05-10 07:45:00',
+        'Peak Ridge',
+        'Camera trap image captured'
+    ),
+    (
+        2,
+        2,
+        '2024-05-12 16:20:00',
+        'Bankwood Area',
+        'Juvenile seen'
+    ),
+    (
+        3,
+        3,
+        '2024-05-15 09:10:00',
+        'Bamboo Grove East',
+        'Feeding observed'
+    ),
+    (
+        2,
+        1,
+        '2024-05-18 18:30:00',
+        'Snowfall Pass',
+        NULL
+    ),
+    (
+        2,
+        3,
+        '2024-05-20 08:00:00',
+        'River Delta',
+        NULL
+    ),
+    (
+        3,
+        2,
+        '2025-05-24 20:28:10',
+        'Mountain Range',
+        NULL
+    );
 
+-- Problem 1
+INSERT INTO
+    rangers ("name", region)
+VALUES ('Derek Fox', 'Coastal Plains');
 
-INSERT INTO sightings (ranger_id, species_id, sighting_time, location, notes)
-VALUES
-    (1, 1, '2024-05-10 07:45:00', 'Peak Ridge', 'Camera trap image captured'),
-    (2, 2, '2024-05-12 16:20:00', 'Bankwood Area', 'Juvenile seen'),
-    (3, 3, '2024-05-15 09:10:00', 'Bamboo Grove East', 'Feeding observed'),
-    (2, 1, '2024-05-18 18:30:00', 'Snowfall Pass', NULL),
-    (2, 3, '2024-05-20 08:00:00', 'River Delta', NULL),
-    (3, 2, '2025-05-24 20:28:10', 'Mountain Range', NULL);
+-- Problem 2
 
+SELECT count(DISTINCT species_id) FROM sightings;
 
+-- Problem 3
+
+SELECT * FROM sightings WHERE location LIKE '%Pass%'
+
+-- Problem 4
+
+SELECT name, count(sightings.sighting_id) as total_sightings FROM rangers
+    LEFT JOIN sightings ON rangers.ranger_id = sightings.ranger_id
+    GROUP BY rangers.ranger_id
